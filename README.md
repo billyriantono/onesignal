@@ -1,4 +1,4 @@
-# OneSignal notifications channel for Laravel 5.3
+# OneSignal notifications channel for Laravel 5.3+
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/laravel-notification-channels/onesignal.svg?style=flat-square)](https://packagist.org/packages/laravel-notification-channels/onesignal)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
@@ -9,14 +9,14 @@
 [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/laravel-notification-channels/onesignal/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/laravel-notification-channels/onesignal/?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/laravel-notification-channels/onesignal.svg?style=flat-square)](https://packagist.org/packages/laravel-notification-channels/onesignal)
 
-This package makes it easy to send [OneSignal notifications](https://documentation.onesignal.com/docs) with Laravel 5.3.
+This package makes it easy to send [OneSignal notifications](https://documentation.onesignal.com/docs) with Laravel 5.3+.
 
 ## Contents
 
 - [Installation](#installation)
 	- [Setting up your OneSignal account](#setting-up-your-onesignal-account)
 - [Usage](#usage)
-	- [Available Message methods](#available-message-methods)
+	- [Available Message methods](#all-available-methods)
 	- [Button usage](#button-usage)
 	- [WebButton usage](#webbutton-usage)
 - [Changelog](#changelog)
@@ -31,11 +31,11 @@ This package makes it easy to send [OneSignal notifications](https://documentati
 
 You can install the package via composer:
 
-``` bash
-composer require laravel-notification-channels/onesignal
+```bash
+$ composer require laravel-notification-channels/onesignal
 ```
 
-You must install the service provider:
+If you're installing the package in Laravel 5.4 or lower, you must import the service provider:
 
 ```php
 // config/app.php
@@ -104,6 +104,22 @@ public function routeNotificationForOneSignal()
 }
 ```
 
+If you want to send the notification based on the OneSignal "syncHashedEmail" feature just return an array with the index "email". **It isn't possible to use multiple E-Mails on one filter because of a limitation of the OneSignal API.**
+
+```php
+public function routeNotificationForOneSignal()
+{
+    return ['email' => 'example@example.com'];
+}
+```
+If you want to send the notification based on the OneSignal "Tags" feature just return an array with the index "tags".
+
+```php
+public function routeNotificationForOneSignal()
+{
+    return ['tags' => ['key' => 'device_uuid', 'relation' => '=', 'value' => '1234567890-abcdefgh-1234567']];
+}
+```
 ### All available methods
 
 - `subject('')`: Accepts a string value for the title.
@@ -113,6 +129,8 @@ public function routeNotificationForOneSignal()
 - `webButton(OneSignalWebButton $button)`: Allows you to add action buttons to the notification (Chrome 48+ (web push) only).
 - `button(OneSignalButton $button)`: Allows you to add buttons to the notification (Supported by iOS 8.0 and Android 4.1+ devices. Icon only works for Android).
 - `setData($key, $value)`: Allows you to set additional data for the message payload. For more information check the [OneSignal documentation](https://documentation.onesignal.com/reference).
+- `setParameter($key, $value)`: Allows you to set additional parameters for the message payload that are available for the REST API. For more information check the [OneSignal documentation](https://documentation.onesignal.com/reference).
+- `setImageAttachments($imageUrl)`: Allows you to set one Image to all possible Attachments [OneSignal Attachment documentation](https://documentation.onesignal.com/reference#section-attachments).
 
 ### Button usage
 
@@ -143,7 +161,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 
 ## Testing
 
-``` bash
+```bash
 $ composer test
 ```
 
@@ -159,6 +177,8 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 - [Marcel Pociot](https://github.com/mpociot)
 - [Freek Van der Herten](https://github.com/freekmurze)
+- [Lukas Kämmerling](https://github.com/LKDevelopment)
+- [David Llop](https://github.com/Lloople)
 - [All Contributors](../../contributors)
 
 ## License
